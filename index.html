@@ -1,161 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mikmik store</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mikmik store</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<header class="top">
-  <div class="brand">
-    <img src="assets/image_639ed42c.jpg" alt="Mikmik store logo" class="logo">
-    <h1>Mikmik Store</h1>
-  </div>
-  <nav>
-    <button data-tab="sales" class="active">Sales</button>
-    <button data-tab="inventory">Inventory</button>
-    <button data-tab="credit">Credit</button>
-    <button data-tab="revenue">Revenue</button>
-  </nav>
-</header>
-
-<section class="stats">
-  <div><span>Sales today</span><b id="st-today">₱0.00</b></div>
-  <div><span>Sales this month</span><b id="st-month">₱0.00</b></div>
-  <div><span>Total credit owed</span><b id="st-utang">₱0.00</b></div>
-  <div><span>Low stock items</span><b id="st-low">0</b></div>
-</section>
-
-<main>
-  <!-- SALES -->
-  <section id="sales" class="tab active">
-    <div class="card scan-bar">
-      <button id="ss-open" class="primary">Scan to sell</button>
-      <span class="muted">Scan products to build a sale, then complete it.</span>
+  <header class="top">
+    <div class="brand">
+      <img src="assets/image_639ed42c.jpg" alt="Mikmik store logo" class="logo">
+      <h1>Mikmik Store</h1>
     </div>
+    <nav>
+      <button data-tab="sales" class="active">Sales</button>
+      <button data-tab="inventory">Inventory</button>
+      <button data-tab="credit">Credit</button>
+      <button data-tab="revenue">Revenue</button>
+    </nav>
+  </header>
 
-    <div id="ss-card" class="card" hidden>
-      <h2>Scan to sell</h2>
-      <div id="ss-reader"></div>
-      <input id="ss-manual" placeholder="USB scanner or paste the code here, then press Enter">
-
-      <label class="small photo-btn">Take photo to scan
-        <input id="ss-photo" type="file" accept="image/*" capture="environment" hidden>
-      </label>
-      <div id="ss-tmp" hidden></div>
-
-      <table class="cart">
-        <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr></thead>
-        <tbody id="ss-body"></tbody>
-      </table>
-      <p class="cart-total">Total: <b id="ss-total">₱0.00</b></p>
-
-      <div class="ss-pay">
-        <select id="ss-type">
-          <option value="cash">Cash</option>
-          <option value="utang">Credit</option>
-        </select>
-        <input id="ss-customer" list="customers" placeholder="Customer name" hidden>
-      </div>
-      <div class="scan-actions">
-        <button id="ss-done" class="primary">Complete sale</button>
-        <button id="ss-clear" class="small">Clear list</button>
-        <button id="ss-close" class="small">Close scanner</button>
-      </div>
-    </div>
-
-    <form id="sale-form" class="card">
-      <h2>New sale</h2>
-      <input id="sale-search" type="search" placeholder="Search product...">
-      <select id="sale-product" required></select>
-      <input id="sale-qty" type="number" min="1" value="1" required>
-      <select id="sale-type">
-        <option value="cash">Cash</option>
-        <option value="utang">Credit</option>
-      </select>
-      <input id="sale-customer" list="customers" placeholder="Customer name" hidden>
-      <datalist id="customers"></datalist>
-      <button class="primary">Record sale</button>
-    </form>
-    <div class="card">
-      <h2>Recent sales</h2>
-      <table><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Total</th><th>Payment</th></tr></thead>
-      <tbody id="sales-body"></tbody></table>
-    </div>
+  <section class="stats">
+    <div><span>Sales today</span><b id="st-today">₱0.00</b></div>
+    <div><span>Sales this month</span><b id="st-month">₱0.00</b></div>
+    <div><span>Total credit owed</span><b id="st-utang">₱0.00</b></div>
+    <div><span>Low stock items</span><b id="st-low">0</b></div>
   </section>
 
-  <!-- INVENTORY -->
-  <section id="inventory" class="tab">
-    <div class="card scan-bar">
-      <button id="scan-open" class="primary">Scan product</button>
-      <span class="muted">Scan a QR code or barcode to add stock without typing.</span>
-    </div>
+  <main>
+    <!-- SALES -->
+    <section id="sales" class="tab active">
+      <div class="card scan-bar">
+        <button id="ss-open" class="primary">Scan to sell</button>
+        <span class="muted">Scan products to build a sale, then complete it.</span>
+      </div>
 
-    <div id="scan-card" class="card" hidden>
-      <h2>Scan product</h2>
-      <div id="reader"></div>
-      <input id="scan-manual" placeholder="USB scanner or paste the code here, then press Enter">
+      <div id="ss-card" class="card" hidden>
+        <h2>Scan to sell</h2>
+        <div id="ss-reader"></div>
+        <input id="ss-manual" placeholder="USB scanner or paste the code here, then press Enter">
 
-      <label class="small photo-btn">Take photo to scan
-        <input id="scan-photo" type="file" accept="image/*" capture="environment" hidden>
-      </label>
-      <div id="reader-tmp" hidden></div>
-
-      <div id="scan-result" class="scan-result" hidden>
-        <p class="scan-line">Product: <b id="scan-name"></b></p>
-        <p id="scan-status" class="muted"></p>
-        <label id="price-wrap">Price
-          <input id="scan-price" type="number" min="0" step="0.01" placeholder="Price">
+        <label class="small photo-btn">Take photo to scan
+          <input id="ss-photo" type="file" accept="image/*" capture="environment" hidden>
         </label>
-        <label>Quantity
-          <input id="scan-qty" type="number" min="1" value="1">
-        </label>
+        <div id="ss-tmp" hidden></div>
+
+        <table class="cart">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ss-body"></tbody>
+        </table>
+        <p class="cart-total">Total: <b id="ss-total">₱0.00</b></p>
+
+        <div class="ss-pay">
+          <select id="ss-type">
+            <option value="cash">Cash</option>
+            <option value="utang">Credit</option>
+          </select>
+          <input id="ss-customer" list="customers" placeholder="Customer name" hidden>
+        </div>
         <div class="scan-actions">
-          <button id="scan-add" class="primary">Add to listing</button>
-          <button id="scan-again" class="small">Scan again</button>
+          <button id="ss-done" class="primary">Complete sale</button>
+          <button id="ss-clear" class="small">Clear list</button>
+          <button id="ss-close" class="small">Close scanner</button>
         </div>
       </div>
 
-      <button id="scan-close" class="small">Close scanner</button>
-    </div>
+      <form id="sale-form" class="card">
+        <h2>New sale</h2>
+        <input id="sale-search" type="search" placeholder="Search product...">
+        <select id="sale-product" required></select>
+        <input id="sale-qty" type="number" min="1" value="1" required>
+        <select id="sale-type">
+          <option value="cash">Cash</option>
+          <option value="utang">Credit</option>
+        </select>
+        <input id="sale-customer" list="customers" placeholder="Customer name" hidden>
+        <datalist id="customers"></datalist>
+        <button class="primary">Record sale</button>
+      </form>
+      <div class="card">
+        <h2>Recent sales</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Payment</th>
+            </tr>
+          </thead>
+          <tbody id="sales-body"></tbody>
+        </table>
+      </div>
+    </section>
 
-    <form id="prod-form" class="card">
-      <h2>Add product</h2>
-      <input id="p-name" placeholder="Name (e.g. Lucky Me Pancit Canton)" required>
-      <input id="p-price" type="number" min="0" step="0.01" placeholder="Price" required>
-      <input id="p-stock" type="number" min="0" placeholder="Stock" required>
-      <button class="primary">Save product</button>
-    </form>
-    <div class="card">
-      <input id="search" placeholder="Search products...">
-      <table><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th></th></tr></thead>
-      <tbody id="inv-body"></tbody></table>
-    </div>
-  </section>
+    <!-- INVENTORY -->
+    <section id="inventory" class="tab">
+      <div class="card scan-bar">
+        <button id="scan-open" class="primary">Scan product</button>
+        <span class="muted">Scan a QR code or barcode to add stock without typing.</span>
+      </div>
 
-  <!-- CREDIT -->
-  <section id="credit" class="tab">
-  <div class="card">
-    <h2>Credit list</h2>
-    <input id="credit-search" type="search" placeholder="Search customer..." class="credit-search">
-    <div id="credit-list"></div>
-  </div>
-</section>
+      <div id="scan-card" class="card" hidden>
+        <h2>Scan product</h2>
+        <div id="reader"></div>
+        <input id="scan-manual" placeholder="USB scanner or paste the code here, then press Enter">
 
-  <!-- REVENUE -->
-  <section id="revenue" class="tab">
-    <div class="card">
-      <h2>Monthly revenue</h2>
-      <table><thead><tr><th>Month</th><th>Total sales</th><th>Cash</th><th>Credit</th><th>Payments collected</th></tr></thead>
-      <tbody id="rev-body"></tbody></table>
-    </div>
-  </section>
-</main>
+        <label class="small photo-btn">Take photo to scan
+          <input id="scan-photo" type="file" accept="image/*" capture="environment" hidden>
+        </label>
+        <div id="reader-tmp" hidden></div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="index.js"></script>
+        <div id="scan-result" class="scan-result" hidden>
+          <p class="scan-line">Product: <b id="scan-name"></b></p>
+          <p id="scan-status" class="muted"></p>
+          <label id="price-wrap">Price
+            <input id="scan-price" type="number" min="0" step="0.01" placeholder="Price">
+          </label>
+          <label>Quantity
+            <input id="scan-qty" type="number" min="1" value="1">
+          </label>
+          <div class="scan-actions">
+            <button id="scan-add" class="primary">Add to listing</button>
+            <button id="scan-again" class="small">Scan again</button>
+          </div>
+        </div>
+
+        <button id="scan-close" class="small">Close scanner</button>
+      </div>
+
+      <form id="prod-form" class="card">
+        <h2>Add product</h2>
+        <input id="p-name" placeholder="Name (e.g. Lucky Me Pancit Canton)" required>
+        <input id="p-price" type="number" min="0" step="0.01" placeholder="Price" required>
+        <input id="p-stock" type="number" min="0" placeholder="Stock" required>
+        <button class="primary">Save product</button>
+      </form>
+      <div class="card">
+        <input id="search" placeholder="Search products...">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="inv-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CREDIT -->
+    <section id="credit" class="tab">
+      <div class="card">
+        <h2>Credit list</h2>
+        <input id="credit-search" type="search" placeholder="Search customer..." class="credit-search">
+        <div id="credit-list"></div>
+      </div>
+    </section>
+
+    <!-- REVENUE -->
+    <section id="revenue" class="tab">
+      <div class="card">
+        <h2>Monthly revenue</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Total sales</th>
+              <th>Cash</th>
+              <th>Credit</th>
+              <th>Payments collected</th>
+            </tr>
+          </thead>
+          <tbody id="rev-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="index.js"></script>
 </body>
+
 </html>

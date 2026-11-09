@@ -1,6 +1,6 @@
 /* ---------- Show errors on the phone ---------- */
 if (typeof supabase === 'undefined' || typeof Swal === 'undefined') {
-  alert('Could not load required libraries. Check that your phone has internet access.');
+  alert('Could not load required libraries. Check that your device has internet access and no ad-blockers are blocking CDNs.');
 }
 window.addEventListener('error', e => alert('JS error: ' + e.message));
 window.addEventListener('unhandledrejection', e => alert('Error: ' + ((e.reason && e.reason.message) || e.reason)));
@@ -8,9 +8,17 @@ window.addEventListener('unhandledrejection', e => alert('Error: ' + ((e.reason 
 const $ = s => document.querySelector(s);
 
 /* ---------- Supabase ---------- */
-const SUPABASE_URL = 'https://eidegdgvtiflemmbmpog.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_typ9tpmaRSAJjuqAaRZQpg_63jXZVh4';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_URL)
+  || (typeof window !== 'undefined' && window.SUPABASE_URL)
+  || 'https://hbcksinakccqhezcmucv.supabase.co';
+
+const SUPABASE_KEY = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_KEY)
+  || (typeof window !== 'undefined' && window.SUPABASE_KEY)
+  || 'sb_publishable_9XJsWIC9L1AJngLvSwpqUQ_2gpXIxCQ';
+
+const sb = (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_KEY)
+  ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+  : null;
 
 let db = { products: [], sales: [], credits: [] };
 
@@ -21,11 +29,17 @@ const fmtDate = d => { const [y, m, day] = d.split('-'); return `${m}/${day}/${y
 const LOW = 5;
 
 /* ---------- SweetAlert helpers ---------- */
-const Alert = Swal.mixin({ confirmButtonColor: '#1f6f4a', cancelButtonColor: '#7a766a' });
-const Toast = Swal.mixin({
-  toast: true, position: 'top-end', showConfirmButton: false,
-  timer: 2200, timerProgressBar: true
-});
+const Alert = typeof Swal !== 'undefined'
+  ? Swal.mixin({ confirmButtonColor: '#1f6f4a', cancelButtonColor: '#7a766a' })
+  : { fire: opts => alert((opts.title ? opts.title + ': ' : '') + (opts.text || opts.html || '')) };
+
+const Toast = typeof Swal !== 'undefined'
+  ? Swal.mixin({
+      toast: true, position: 'top-end', showConfirmButton: false,
+      timer: 2200, timerProgressBar: true
+    })
+  : { fire: opts => console.log('Toast:', opts.title) };
+
 const ok = title => Toast.fire({ icon: 'success', title });
 
 const fail = e => Alert.fire({
@@ -38,6 +52,9 @@ const check = r => { if (r.error) throw r.error; return r.data; };
 
 /* ---------- Load data from Supabase ---------- */
 async function load() {
+  if (!sb) {
+    throw new Error('Supabase is not initialized. Please verify your internet connection and Supabase configuration.');
+  }
   const [p, s, c] = await Promise.all([
     sb.from('products').select('*').order('name'),
     sb.from('sales').select('*, customers(name)').order('created_at', { ascending: false }).limit(1000),
@@ -506,5 +523,6 @@ function renderStats() {
 function render() { renderStats(); renderSales(); renderInventory(); renderCredit(); renderRevenue(); }
 
 /* ---------- Start ---------- */
+render();
 renderCart();
 load().catch(fail);
