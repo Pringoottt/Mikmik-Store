@@ -75,3 +75,15 @@ details[open] .arrow{transform:rotate(90deg)}
 .items li{display:grid;grid-template-columns:1fr auto auto;gap:12px;padding:3px 0}
 .items li.paid{color:var(--accent)}
 @media(max-width:600px){th,td{font-size:.8rem;padding:6px 3px}}
+
+/* Login screen */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.login-card{width:100%;max-width:360px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px 24px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.login-logo{width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin-bottom:12px}
+.login-card h1{margin:0 0 4px;font-size:1.5rem}
+.login-card p{margin:0 0 20px;color:var(--muted);font-size:.9rem}
+.login-form{display:grid;gap:12px;text-align:left}
+.login-form input{padding:11px 12px;font-size:1rem}
+.login-form .primary{width:100%;padding:12px;font-size:1rem;margin-top:4px}
+.logout-btn{background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;padding:6px 14px;border-radius:999px;cursor:pointer;font:inherit}
+.logout-btn:hover{background:rgba(255,255,255,.15);border-color:#fff}

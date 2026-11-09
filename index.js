@@ -1,3 +1,16 @@
+import authConfig from './auth.json';
+
+let currentAuth = authConfig;
+// Fetch runtime auth.json if available
+if (typeof fetch !== 'undefined') {
+  fetch('./auth.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(data => { if (data && data.password) currentAuth = data; })
+    .catch(() => {});
+}
+
+const AUTH_KEY = 'mikmik_store_auth';
+
 /* ---------- Show errors on the phone ---------- */
 if (typeof supabase === 'undefined' || typeof Swal === 'undefined') {
   alert('Could not load required libraries. Check that your device has internet access and no ad-blockers are blocking CDNs.');
@@ -522,7 +535,75 @@ function renderStats() {
 
 function render() { renderStats(); renderSales(); renderInventory(); renderCredit(); renderRevenue(); }
 
+/* ---------- Authentication ---------- */
+function isLoggedIn() {
+  return localStorage.getItem(AUTH_KEY) === 'true';
+}
+
+function setView(authenticated) {
+  const loginView = $('#login-view');
+  const appView = $('#app-view');
+  if (authenticated) {
+    loginView.hidden = true;
+    appView.hidden = false;
+    render();
+    renderCart();
+    load().catch(fail);
+  } else {
+    loginView.hidden = false;
+    appView.hidden = true;
+    const passInput = $('#login-pass');
+    if (passInput) {
+      passInput.value = '';
+      passInput.focus();
+    }
+  }
+}
+
+$('#login-form').onsubmit = e => {
+  e.preventDefault();
+  const user = $('#login-user').value.trim();
+  const pass = $('#login-pass').value;
+
+  const expectedUser = currentAuth.username || 'admin';
+  const expectedPass = currentAuth.password;
+
+  const userMatches = !user || user.toLowerCase() === expectedUser.toLowerCase();
+  if (userMatches && pass === expectedPass) {
+    localStorage.setItem(AUTH_KEY, 'true');
+    setView(true);
+    ok('Welcome back!');
+  } else {
+    Alert.fire({
+      icon: 'error',
+      title: 'Access Denied',
+      text: 'Incorrect username or password.'
+    });
+    const passInput = $('#login-pass');
+    passInput.value = '';
+    passInput.focus();
+  }
+};
+
+$('#logout-btn').onclick = async () => {
+  const res = await Alert.fire({
+    title: 'Log out?',
+    text: 'You will need your password to access the store again.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Log out',
+    cancelButtonText: 'Cancel'
+  });
+  if (res.isConfirmed) {
+    localStorage.removeItem(AUTH_KEY);
+    setView(false);
+    Toast.fire({ icon: 'info', title: 'Logged out' });
+  }
+};
+
 /* ---------- Start ---------- */
-render();
-renderCart();
-load().catch(fail);
+if (isLoggedIn()) {
+  setView(true);
+} else {
+  setView(false);
+}

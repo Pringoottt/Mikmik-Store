@@ -5,10 +5,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mikmik store</title>
+  <link rel="icon" type="image/jpeg" href="assets/image_639ed42c.jpg">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <!-- LOGIN VIEW -->
+  <div id="login-view" class="login-wrap">
+    <div class="login-card">
+      <img src="assets/image_639ed42c.jpg" alt="Mikmik store logo" class="login-logo">
+      <h1>Mikmik Store</h1>
+      <p>Enter your password to continue</p>
+      <form id="login-form" class="login-form">
+        <input id="login-user" type="text" placeholder="Username (default: admin)" autocomplete="username">
+        <input id="login-pass" type="password" placeholder="Password" required autocomplete="current-password" autofocus>
+        <button type="submit" class="primary">Log In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APP VIEW (Protected) -->
+  <div id="app-view" hidden>
   <header class="top">
     <div class="brand">
       <img src="assets/image_639ed42c.jpg" alt="Mikmik store logo" class="logo">
@@ -19,6 +36,7 @@
       <button data-tab="inventory">Inventory</button>
       <button data-tab="credit">Credit</button>
       <button data-tab="revenue">Revenue</button>
+      <button id="logout-btn" class="logout-btn" type="button">Log out</button>
     </nav>
   </header>
 
@@ -191,6 +209,7 @@
       </div>
     </section>
   </main>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
